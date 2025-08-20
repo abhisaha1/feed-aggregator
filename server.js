@@ -14,6 +14,7 @@ const rssFeeds = [
 ];
 
 // Basic route
+const ALLOWED_FIELDS = ['title', 'link', 'pubDate']
 app.get('/', async (req, res) => {
   const feedData = await Promise.all(rssFeeds.map((feed) => {
     return new Promise(async (resolve) => {
@@ -25,7 +26,12 @@ app.get('/', async (req, res) => {
   feedData.forEach(feed => {
     fullData.push(...feed)
   })
-  res.json(fullData);
+  
+  res.json(fullData.map(item => ({
+    title: item.title,
+    link: item.link,
+    pubDate: item.pubDate
+  })));
 });
 
 // Start the server
